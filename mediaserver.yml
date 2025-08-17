@@ -1,0 +1,83 @@
+services:
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: qbittorrent
+    network_mode: host
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Australia/Brisbane
+      - WEBUI_PORT=8086
+    volumes:
+      - /srv/qbittorrent/config.conf:/config/qbittorrent/qBittorrent/qBittorrent.conf
+      - /srv/downloads:/downloads
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr
+    container_name: sonarr
+    network_mode: host
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Australia/Brisbane
+    volumes:
+      - /srv/sonarr:/config
+      - /srv/downloads:/downloads
+      - /mnt/media:/media
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr
+    container_name: radarr
+    network_mode: host
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Australia/Brisbane
+    volumes:
+      - /srv/radarr:/config
+      - /mnt/media:/media
+      - /srv/downloads:/downloads
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr
+    container_name: prowlarr
+    network_mode: host
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Australia/Brisbane
+    volumes:
+      - /srv/prowlarr:/config
+    restart: unless-stopped
+
+  emby:
+    image: lscr.io/linuxserver/emby
+    container_name: emby
+    network_mode: host
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Australia/Brisbane
+    volumes:
+      - /srv/emby:/config
+      - /mnt/media:/media
+    restart: unless-stopped

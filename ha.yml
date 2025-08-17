@@ -1,0 +1,23 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - /srv/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+  matter-server:
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    container_name: matter-server
+    network_mode: host  # necessary for mDNS
+    volumes:
+      - ./matter-storage:/data
+    environment:
+      - MATTER_SERVER_STORAGE_PATH=/data
+    restart: unless-stopped
